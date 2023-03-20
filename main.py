@@ -2,6 +2,12 @@ import tkinter
 import ttkbootstrap as ttkb
 from ttkbootstrap.constants import *
 
+import pandas as pd
+
+data = {
+
+}
+
 class sunshine_camp_gui(ttkb.Window):
     def __init__(self) -> None:
         super().__init__()
@@ -9,33 +15,40 @@ class sunshine_camp_gui(ttkb.Window):
         self.title("Sunshine camp practice assessment")
         # self.geometry("500x500")
 
-        self.main_title = ttkb.Label(self, text="Sunshine Camp information recorder")
-        self.main_title.config(font=('Helvetica', 14))
-        self.main_title.grid(row=0, column=0, columnspan=2, padx=20, pady=20)
+        main_title = ttkb.Label(self, text="Sunshine Camp information recorder")
+        main_title.config(font=('Helvetica', 14))
+        main_title.grid(row=0, column=0, columnspan=2, padx=20, pady=20)
 
-        self.name_label = ttkb.Label(self, text="Name: ")
-        self.name_label.grid(column=0, row=1, padx=20, pady=10)
+        name_label = ttkb.Label(self, text="Name: ")
+        name_label.grid(column=0, row=1, padx=20, pady=10)
 
-        self.name_entry = ttkb.Entry(self)
-        self.name_entry.grid(column=1, row=1, padx=20, pady=10)
+        name_entry = ttkb.Entry(self)
+        name_entry.grid(column=1, row=1, padx=20, pady=10)
 
-        self.location_label = ttkb.Label(self, text="Location: ")
-        self.location_label.grid(row=2,column=0,padx=20,pady=10)
+        location_label = ttkb.Label(self, text="Location: ")
+        location_label.grid(row=2,column=0,padx=20,pady=10)
 
-        self.location_entry = ttkb.Entry(self)
-        self.location_entry.grid(row=2,column=1,padx=20,pady=10)
+        location_entry = ttkb.Entry(self)
+        location_entry.grid(row=2,column=1,padx=20,pady=10)
 
-        self.number_of_campers_label = ttkb.Label(self, text="Number of campers: ")
-        self.number_of_campers_label.grid(row=3,column=0,padx=20,pady=10)
+        number_of_campers_label = ttkb.Label(self, text="Number of campers: ")
+        number_of_campers_label.grid(row=3,column=0,padx=20,pady=10)
 
-        self.number_of_campers_entry = ttkb.Entry(self)
-        self.number_of_campers_entry.grid(row=3, column=1, padx=20,pady=10)
+        number_of_campers_entry = ttkb.Entry(self)
+        number_of_campers_entry.grid(row=3, column=1, padx=20,pady=10)
 
-        self.weather_label = ttkb.Label(self, text="Weather conditions: ")
-        self.weather_label.grid(row=4, column=0, padx=20, pady=10)
+        weather_label = ttkb.Label(self, text="Weather conditions: ")
+        weather_label.grid(row=4, column=0, padx=20, pady=10)
 
-        self.weather_entry = ttkb.Entry(self)
-        self.weather_entry.grid(row=4, column=1, padx=20, pady=10)
+        weather_entry = ttkb.Entry(self)
+        weather_entry.grid(row=4, column=1, padx=20, pady=10)
+
+        def update_button_func():
+            data[name_entry.get()] = [location_entry.get(), number_of_campers_entry.get(), weather_entry.get()]
+            print(data)
+
+        update_button = ttkb.Button(self, text="Update information", bootstyle=INFO, command=update_button_func)
+        update_button.grid(row=5,column=0,columnspan=2,padx=20,pady=20)
 
 app = sunshine_camp_gui()
 app.mainloop()
