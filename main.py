@@ -2,8 +2,6 @@ import tkinter
 import ttkbootstrap as ttkb
 from ttkbootstrap.constants import *
 
-import pandas as pd
-
 data = {
 
 }
@@ -13,7 +11,6 @@ class sunshine_camp_gui(ttkb.Window):
         super().__init__()
 
         self.title("Sunshine camp practice assessment")
-        # self.geometry("500x500")
 
         main_title = ttkb.Label(self, text="Sunshine Camp information recorder")
         main_title.config(font=('Helvetica', 14))
@@ -47,12 +44,9 @@ class sunshine_camp_gui(ttkb.Window):
             data[name_entry.get()] = [location_entry.get(), number_of_campers_entry.get(), weather_entry.get()]
             for i in enumerate(data.keys()):
                 ttkb.Label(self, text=i[1]).grid(row=i[0] + 7,column=0, pady=5)
-                print(data[i[1]])
-            
-                for j in data[i[1]]:
-                    ttkb.Label(self, text=data[i[1]][0]).grid(row=i[0] + 7, column=1, pady=5)
-                    ttkb.Label(self, text=data[i[1]][1]).grid(row=i[0] + 7, column=2, pady=5)
-                    ttkb.Label(self, text=data[i[1]][2]).grid(row=i[0] + 7, column=3, pady=5)
+                ttkb.Label(self, text=data[i[1]][0]).grid(row=i[0] + 7, column=1, pady=5)
+                ttkb.Label(self, text=data[i[1]][1]).grid(row=i[0] + 7, column=2, pady=5)
+                ttkb.Label(self, text=data[i[1]][2]).grid(row=i[0] + 7, column=3, pady=5)
 
 
         update_button = ttkb.Button(self, text="Update information", bootstyle=INFO, command=update_button_func)
