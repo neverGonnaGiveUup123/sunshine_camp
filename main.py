@@ -46,6 +46,20 @@ class sunshine_camp_gui(ttkb.Window):
             label_list.clear()
             [i.destroy() for i in buffer_list]
             buffer_list.clear()
+
+            if len(name_entry.get()) <= 1:
+                error_label.config(text="A leader name must be provided!")
+                return 0
+            try:
+                if int(number_of_campers_entry.get()) < 5 or int(number_of_campers_entry.get()) > 10:
+                    error_label.config(text="Number of campers must be within 5 and 10!")
+                    return 0
+            except ValueError:
+                error_label.config(text="Number of campers must be a number!")
+                return 0
+            else:
+                error_label.config(text="No current errors.")
+
             data[name_entry.get()] = [location_entry.get(),number_of_campers_entry.get(),weather_entry.get()]
             for x,y in enumerate(data.keys()):
                 group_label_list = []
@@ -65,8 +79,12 @@ class sunshine_camp_gui(ttkb.Window):
                 buffer_list.append(d)
         
         def delete_button_func():
-            pass
-
+            try:
+                data.pop(delete_entry.get())
+            except KeyError:
+                error_label.config(text="Leader name not found.")
+            finally:
+                error_label.config(text="Leader group deleted successfully. Remember to delete the entries!")
 
         update_button = ttkb.Button(self, text="Update information", bootstyle=INFO, command=update_button_func)
         update_button.grid(row=5,column=1,columnspan=2,padx=20,pady=20)
@@ -78,7 +96,7 @@ class sunshine_camp_gui(ttkb.Window):
         delete_button = ttkb.Button(self, text="Delete group", bootstyle=DANGER, command=delete_button_func)
         delete_button.grid(row=7, column=1, columnspan=2, padx=10,pady=10)
 
-        error_label = ttkb.Label(self, text=" ")
+        error_label = ttkb.Label(self, text="No current errors.")
         error_label.grid(row=8,column=1,columnspan=2,padx=10,pady=10)
 
         num_of_campers_output = ttkb.Label(self, text="Number of campers: ")
