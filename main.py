@@ -39,27 +39,30 @@ class sunshine_camp_gui(ttkb.Window):
 
         weather_entry = ttkb.Entry(self)
         weather_entry.grid(row=4, column=2, padx=20, pady=10)
-        
-        def update_button_func():
-            label_list = []
-            data[name_entry.get()] = [location_entry.get(), number_of_campers_entry.get(), weather_entry.get()]
-            for i in range(len(data)):
-                label_list.append([None, None, None, None, None])
-            for i, j in enumerate(data.keys()):
-                print(i)
-                label_list[i] = [False,
-                                 ttkb.Label(self,text=j),
-                                 ttkb.Label(self,text=data[j][0]), 
-                                 ttkb.Label(self,text=data[j][1]),
-                                 ttkb.Label(self,text=data[j][2])]
 
-                for boolean,w,x,y,z in label_list:
-                    if boolean == False:
-                        boolean = True
-                        w.grid(row=i+10,column=0)
-                        x.grid(row=i+10,column=1)
-                        y.grid(row=i+10,column=2)
-                        z.grid(row=i+10,column=3)
+        label_list = []
+        buffer_list = []
+        def update_button_func():
+            label_list.clear()
+            [i.destroy() for i in buffer_list]
+            buffer_list.clear()
+            data[name_entry.get()] = [location_entry.get(),number_of_campers_entry.get(),weather_entry.get()]
+            for x,y in enumerate(data.keys()):
+                group_label_list = []
+                group_label_list.append(ttkb.Label(self,text=y))
+                [group_label_list.append(ttkb.Label(self, text=j)) for j in data[y]]
+                group_label_list.append(x)
+                label_list.append(group_label_list)
+            print(label_list)
+            for a,b,c,d,x in label_list:
+                a.grid(row=x+10,column=0)
+                b.grid(row=x+10,column=1)
+                c.grid(row=x+10,column=2)
+                d.grid(row=x+10,column=3)
+
+                buffer_list.append(b)
+                buffer_list.append(c)
+                buffer_list.append(d)
         
         def delete_button_func():
             pass
