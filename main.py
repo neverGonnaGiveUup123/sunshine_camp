@@ -1,4 +1,3 @@
-import tkinter
 import ttkbootstrap as ttkb
 from ttkbootstrap.constants import *
 import datetime
@@ -44,31 +43,7 @@ class sunshine_camp_gui(ttkb.Window):
         weather_entry = ttkb.Entry(self)
         weather_entry.grid(row=4, column=3,  pady=10)
 
-        label_list = []
-        buffer_list = []
-        def update_button_func():
-            if self.check_delete == True:
-                error_label.config(text="Leader group removed.")
-                self.check_delete = False
-
-            if len(name_entry.get()) <= 1:
-                error_label.config(text="A leader name must be provided!")
-                return 0
-            try:
-                if int(number_of_campers_entry.get()) < 5 or int(number_of_campers_entry.get()) > 10:
-                    error_label.config(text="Number must be within 5 and 10!")
-                    return 0
-            except ValueError:
-                error_label.config(text="Number of campers must be a number!")
-                return 0
-            else:
-                error_label.config(text="No current errors.")
-
-            label_list.clear()
-            [i.destroy() for i in buffer_list]
-            buffer_list.clear()
-
-            data[name_entry.get()] = [location_entry.get(),number_of_campers_entry.get(),weather_entry.get()]
+        def handle_label_grid():
             for x,y in enumerate(data.keys()):
                 group_label_list = []
                 group_label_list.append(ttkb.Label(self,text=y))
@@ -88,6 +63,31 @@ class sunshine_camp_gui(ttkb.Window):
                 buffer_list.append(c)
                 buffer_list.append(d)
                 buffer_list.append(date)
+
+        def clear_lists():
+            label_list.clear()
+            [i.destroy() for i in buffer_list]
+            buffer_list.clear()
+
+        label_list = []
+        buffer_list = []
+        def update_button_func():
+            clear_lists()
+            if len(name_entry.get()) <= 1:
+                error_label.config(text="A leader name must be provided!")
+                return 0
+            try:
+                if int(number_of_campers_entry.get()) < 5 or int(number_of_campers_entry.get()) > 10:
+                    error_label.config(text="Number must be within 5 and 10!")
+                    return 0
+            except ValueError:
+                error_label.config(text="Number of campers must be a number!")
+                return 0
+            else:
+                error_label.config(text="No current errors.")
+
+            data[name_entry.get()] = [location_entry.get(),number_of_campers_entry.get(),weather_entry.get()]
+            handle_label_grid()
         
         def delete_button_func():
             try:
@@ -96,7 +96,8 @@ class sunshine_camp_gui(ttkb.Window):
                 error_label.config(text="Leader name not found.")
             else:
                 error_label.config(text="Group deleted successfully.")
-                self.check_delete = True
+                clear_lists()
+                handle_label_grid()
 
         update_button = ttkb.Button(self, text="Update information", bootstyle=INFO, command=update_button_func)
         update_button.grid(row=5,column=2,pady=20)
