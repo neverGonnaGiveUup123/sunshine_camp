@@ -1,6 +1,7 @@
 import tkinter
 import ttkbootstrap as ttkb
 from ttkbootstrap.constants import *
+import datetime
 
 data = {
 
@@ -10,54 +11,52 @@ class sunshine_camp_gui(ttkb.Window):
     def __init__(self) -> None:
         super().__init__()
 
+        self.resizable(False,False)
         self.check_delete = False
+        self.date = datetime.datetime.now()
         self.title("Sunshine camp practice assessment")
 
-        main_title = ttkb.Label(self, text="Sunshine Camp information recorder")
+        main_title = ttkb.Label(self, text="Sunshine Camp info table")
         main_title.config(font=('Helvetica', 14))
-        main_title.grid(row=0, column=1, columnspan=2, padx=20, pady=20)
+        main_title.grid(row=0, column=2, pady=20)
 
         name_label = ttkb.Label(self, text="Name: ")
-        name_label.grid(column=1, row=1, padx=20, pady=10)
+        name_label.grid(column=1, row=1, pady=10)
 
         name_entry = ttkb.Entry(self)
-        name_entry.grid(column=2, row=1, padx=20, pady=10)
+        name_entry.grid(column=3, row=1, pady=10)
 
         location_label = ttkb.Label(self, text="Location: ")
-        location_label.grid(row=2,column=1,padx=20,pady=10)
+        location_label.grid(row=2,column=1,pady=10)
 
         location_entry = ttkb.Entry(self)
-        location_entry.grid(row=2,column=2,padx=20,pady=10)
+        location_entry.grid(row=2,column=3,pady=10)
 
         number_of_campers_label = ttkb.Label(self, text="Number of campers: ")
-        number_of_campers_label.grid(row=3,column=1,padx=20,pady=10)
+        number_of_campers_label.grid(row=3,column=1,pady=10)
 
         number_of_campers_entry = ttkb.Entry(self)
-        number_of_campers_entry.grid(row=3, column=2, padx=20,pady=10)
+        number_of_campers_entry.grid(row=3, column=3, pady=10)
 
         weather_label = ttkb.Label(self, text="Weather conditions: ")
-        weather_label.grid(row=4, column=1, padx=20, pady=10)
+        weather_label.grid(row=4, column=1,  pady=10)
 
         weather_entry = ttkb.Entry(self)
-        weather_entry.grid(row=4, column=2, padx=20, pady=10)
+        weather_entry.grid(row=4, column=3,  pady=10)
 
         label_list = []
         buffer_list = []
         def update_button_func():
-            label_list.clear()
-            [i.destroy() for i in buffer_list]
-            buffer_list.clear()
-
             if self.check_delete == True:
                 error_label.config(text="Leader group removed.")
                 self.check_delete = False
-                return 0
+
             if len(name_entry.get()) <= 1:
                 error_label.config(text="A leader name must be provided!")
                 return 0
             try:
                 if int(number_of_campers_entry.get()) < 5 or int(number_of_campers_entry.get()) > 10:
-                    error_label.config(text="Number of campers must be within 5 and 10!")
+                    error_label.config(text="Number must be within 5 and 10!")
                     return 0
             except ValueError:
                 error_label.config(text="Number of campers must be a number!")
@@ -65,23 +64,30 @@ class sunshine_camp_gui(ttkb.Window):
             else:
                 error_label.config(text="No current errors.")
 
+            label_list.clear()
+            [i.destroy() for i in buffer_list]
+            buffer_list.clear()
+
             data[name_entry.get()] = [location_entry.get(),number_of_campers_entry.get(),weather_entry.get()]
             for x,y in enumerate(data.keys()):
                 group_label_list = []
                 group_label_list.append(ttkb.Label(self,text=y))
                 [group_label_list.append(ttkb.Label(self, text=j)) for j in data[y]]
                 group_label_list.append(x)
+                group_label_list.append(ttkb.Label(self,text=f'{self.date.strftime("%d")}/{self.date.strftime("%m")}/{self.date.strftime("%y")}'))
                 label_list.append(group_label_list)
 
-            for a,b,c,d,x in label_list:
+            for a,b,c,d,x,date in label_list:
                 a.grid(row=x+10,column=0)
                 b.grid(row=x+10,column=1)
                 c.grid(row=x+10,column=2)
                 d.grid(row=x+10,column=3)
+                date.grid(row=x+10,column=4)
                 buffer_list.append(a)
                 buffer_list.append(b)
                 buffer_list.append(c)
                 buffer_list.append(d)
+                buffer_list.append(date)
         
         def delete_button_func():
             try:
@@ -89,33 +95,36 @@ class sunshine_camp_gui(ttkb.Window):
             except KeyError:
                 error_label.config(text="Leader name not found.")
             else:
-                error_label.config(text="Leader group deleted successfully.")
+                error_label.config(text="Group deleted successfully.")
                 self.check_delete = True
 
         update_button = ttkb.Button(self, text="Update information", bootstyle=INFO, command=update_button_func)
-        update_button.grid(row=5,column=1,columnspan=2,padx=20,pady=20)
+        update_button.grid(row=5,column=2,pady=20)
 
-        delete_label = ttkb.Label(self,text="Enter leader name to delete group: ")
-        delete_label.grid(row=6,column=1,padx=10,pady=10)
+        delete_label = ttkb.Label(self,text="Enter name to delete group: ")
+        delete_label.grid(row=6,column=1,pady=10)
         delete_entry = ttkb.Entry(self)
-        delete_entry.grid(row=6,column=2,padx=10,pady=10)
+        delete_entry.grid(row=6,column=3,pady=10)
         delete_button = ttkb.Button(self, text="Delete group", bootstyle=DANGER, command=delete_button_func)
-        delete_button.grid(row=7, column=1, columnspan=2, padx=10,pady=10)
+        delete_button.grid(row=7, column=2, pady=10)
 
         error_label = ttkb.Label(self, text="No current errors.")
-        error_label.grid(row=8,column=1,columnspan=2,padx=10,pady=10)
+        error_label.grid(row=8,column=2,pady=10)
 
-        num_of_campers_output = ttkb.Label(self, text="Number of campers: ")
-        num_of_campers_output.grid(row=9,column=2,padx=10,pady=5)
+        num_of_campers_output = ttkb.Label(self, text="Number of campers:")
+        num_of_campers_output.grid(row=9,column=2,pady=5)
 
-        location_output = ttkb.Label(self, text="Location: ")
-        location_output.grid(row=9,column=1,padx=10,pady=5)
+        location_output = ttkb.Label(self, text="Location:")
+        location_output.grid(row=9,column=1,pady=5)
 
-        weather_output = ttkb.Label(self, text="Weather: ")
-        weather_output.grid(row=9,column=3,padx=10,pady=5)
+        weather_output = ttkb.Label(self, text="Weather:")
+        weather_output.grid(row=9,column=3,pady=5)
 
-        names_label = ttkb.Label(self, text="Names: ")
-        names_label.grid(row=9, column=0, padx=10,pady=5)
+        names_label = ttkb.Label(self, text="Leader names:")
+        names_label.grid(row=9, column=0, pady=5,padx=20)
+
+        time_of_entry_label = ttkb.Label(self, text="Time of entry:")
+        time_of_entry_label.grid(row=9, column=4, pady=5, padx=20)
 
 app = sunshine_camp_gui()
 app.mainloop()
