@@ -75,13 +75,16 @@ class sunshine_camp_gui(ttkb.Window):
             clear_lists()
             if len(name_entry.get()) <= 1:
                 error_label.config(text="A leader name must be provided!")
+                handle_label_grid()
                 return 0
             try:
                 if int(number_of_campers_entry.get()) < 5 or int(number_of_campers_entry.get()) > 10:
                     error_label.config(text="Number must be within 5 and 10!")
+                    handle_label_grid()
                     return 0
             except ValueError:
                 error_label.config(text="Number of campers must be a number!")
+                handle_label_grid()
                 return 0
             else:
                 error_label.config(text="No current errors.")
