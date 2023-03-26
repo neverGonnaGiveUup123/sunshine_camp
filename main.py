@@ -10,6 +10,7 @@ class sunshine_camp_gui(ttkb.Window):
     def __init__(self) -> None:
         super().__init__()
 
+        self.check_delete = False
         self.title("Sunshine camp practice assessment")
 
         main_title = ttkb.Label(self, text="Sunshine Camp information recorder")
@@ -47,6 +48,10 @@ class sunshine_camp_gui(ttkb.Window):
             [i.destroy() for i in buffer_list]
             buffer_list.clear()
 
+            if self.check_delete == True:
+                error_label.config(text="Leader group removed.")
+                self.check_delete = False
+                return 0
             if len(name_entry.get()) <= 1:
                 error_label.config(text="A leader name must be provided!")
                 return 0
@@ -67,13 +72,13 @@ class sunshine_camp_gui(ttkb.Window):
                 [group_label_list.append(ttkb.Label(self, text=j)) for j in data[y]]
                 group_label_list.append(x)
                 label_list.append(group_label_list)
-            print(label_list)
+
             for a,b,c,d,x in label_list:
                 a.grid(row=x+10,column=0)
                 b.grid(row=x+10,column=1)
                 c.grid(row=x+10,column=2)
                 d.grid(row=x+10,column=3)
-
+                buffer_list.append(a)
                 buffer_list.append(b)
                 buffer_list.append(c)
                 buffer_list.append(d)
@@ -83,8 +88,9 @@ class sunshine_camp_gui(ttkb.Window):
                 data.pop(delete_entry.get())
             except KeyError:
                 error_label.config(text="Leader name not found.")
-            finally:
-                error_label.config(text="Leader group deleted successfully. Remember to delete the entries!")
+            else:
+                error_label.config(text="Leader group deleted successfully.")
+                self.check_delete = True
 
         update_button = ttkb.Button(self, text="Update information", bootstyle=INFO, command=update_button_func)
         update_button.grid(row=5,column=1,columnspan=2,padx=20,pady=20)
