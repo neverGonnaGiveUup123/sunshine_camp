@@ -74,7 +74,7 @@ class sunshine_camp_gui(ttkb.Window):
                 group_label_list.append(ttkb.Label(self,text=y))
                 [group_label_list.append(ttkb.Label(self, text=j)) for j in data[y]]
                 group_label_list.append(x)
-                group_label_list.append(ttkb.Label(self,text=f'{self.date.strftime("%d")}/{self.date.strftime("%m")}/{self.date.strftime("%y")}'))
+                group_label_list.append(ttkb.Label(self,text=f'{self.date.strftime("%a")} {self.date.strftime("%H")}:{self.date.strftime("%M")}'))
                 label_list.append(group_label_list)
 
             for a,b,c,d,x,date in label_list:
